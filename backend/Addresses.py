@@ -32,18 +32,6 @@ def add_datapoints(data="2025LAHacks_Addresses.csv"):
     locs.add_point(Point("Point 20", 37.762407, -118.832931, 100))  # California
     return locs.get_json()
 
-# Initialize Flask app
-app = Flask(__name__)
-
-# Route to fetch the datapoints
-@app.route('/api/datapoints', methods=['GET'])
-def get_datapoints():
-    data = add_datapoints()
-    return jsonify(data)
-
-if __name__ == '__main__':
-    app.run(debug=True)  # Set debug=False when deploying
-
 
 
 

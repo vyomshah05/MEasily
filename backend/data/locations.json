@@ -1,0 +1,144 @@
+{
+    "locations": [
+      {
+        "id": 1,
+        "name": "Point 1",
+        "latitude": 35.36533,
+        "longitude": -103.285393,
+        "risk_percentage": 100
+      },
+      {
+        "id": 2,
+        "name": "Point 2",
+        "latitude": 36.504315,
+        "longitude": -110.623989,
+        "risk_percentage": 100
+      },
+      {
+        "id": 3,
+        "name": "Point 3",
+        "latitude": 36.668913,
+        "longitude": -104.07088,
+        "risk_percentage": 100
+      },
+      {
+        "id": 4,
+        "name": "Point 4",
+        "latitude": 31.999207,
+        "longitude": -109.496635,
+        "risk_percentage": 100
+      },
+      {
+        "id": 5,
+        "name": "Point 5",
+        "latitude": 32.451218,
+        "longitude": -106.815506,
+        "risk_percentage": 100
+      },
+      {
+        "id": 6,
+        "name": "Point 6",
+        "latitude": 33.692817,
+        "longitude": -106.180855,
+        "risk_percentage": 100
+      },
+      {
+        "id": 7,
+        "name": "Point 7",
+        "latitude": 32.669337,
+        "longitude": -112.051643,
+        "risk_percentage": 100
+      },
+      {
+        "id": 8,
+        "name": "Point 8",
+        "latitude": 34.714948,
+        "longitude": -111.136505,
+        "risk_percentage": 100
+      },
+      {
+        "id": 9,
+        "name": "Point 9",
+        "latitude": 33.289541,
+        "longitude": -111.854949,
+        "risk_percentage": 100
+      },
+      {
+        "id": 10,
+        "name": "Point 10",
+        "latitude": 35.558228,
+        "longitude": -112.095781,
+        "risk_percentage": 100
+      },
+      {
+        "id": 11,
+        "name": "Point 11",
+        "latitude": 35.955641,
+        "longitude": -108.596743,
+        "risk_percentage": 100
+      },
+      {
+        "id": 12,
+        "name": "Point 12",
+        "latitude": 32.059985,
+        "longitude": -103.028518,
+        "risk_percentage": 100
+      },
+      {
+        "id": 13,
+        "name": "Point 13",
+        "latitude": 32.693251,
+        "longitude": -113.368579,
+        "risk_percentage": 100
+      },
+      {
+        "id": 14,
+        "name": "Point 14",
+        "latitude": 32.439455,
+        "longitude": -114.978231,
+        "risk_percentage": 100
+      },
+      {
+        "id": 15,
+        "name": "Point 15",
+        "latitude": 35.479894,
+        "longitude": -103.484211,
+        "risk_percentage": 100
+      },
+      {
+        "id": 16,
+        "name": "Point 16",
+        "latitude": 36.834641,
+        "longitude": -106.671,
+        "risk_percentage": 100
+      },
+      {
+        "id": 17,
+        "name": "Point 17",
+        "latitude": 31.660974,
+        "longitude": -102.24508,
+        "risk_percentage": 100
+      },
+      {
+        "id": 18,
+        "name": "Point 18",
+        "latitude": 34.843735,
+        "longitude": -114.089128,
+        "risk_percentage": 100
+      },
+      {
+        "id": 19,
+        "name": "Point 19",
+        "latitude": 37.621947,
+        "longitude": -114.630343,
+        "risk_percentage": 100
+      },
+      {
+        "id": 20,
+        "name": "Point 20",
+        "latitude": 37.762407,
+        "longitude": -118.832931,
+        "risk_percentage": 100
+      }
+    ]
+  }
