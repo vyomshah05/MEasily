@@ -3,7 +3,8 @@ from Addresses import add_datapoints
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from Add_point import Point, All_Points  # Add this import
-
+from Gemini import call_gemini_flash
+from Geolocation import get_address, get_best_points
 
 app = Flask(__name__)
 CORS(app)
@@ -47,9 +48,11 @@ def calculate_risk():
 
     try:
         risk = path_risk_get_risk(start_point, end_point, add_datapoints())
-        return jsonify({"coefficient_of_determination": risk})
+        alternates = get_best_points(get_address(end_point.get_name()))
+        gemini = call_gemini_flash(risk)
+        
+        return {"coefficient_of_determination": risk, 'text': gemini, 'lists':[{'name': point.get_name(),'lat': point.get_lat(), 'lng': point.get_long(), 'risk': r} for r,point in alternates.values()]}
     except Exception as e:
-        print(f"Error calculating risk: {str(e)}")
         return jsonify({"error": f"Failed to calculate risk: {str(e)}"}), 500
 
 # Add a simple endpoint that works with GET requests for testing
