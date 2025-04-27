@@ -117,7 +117,7 @@ recDescBtn.addEventListener('click', async () => {
       form.append('file', blob, `speech.${mime.split('/')[1]}`);
 
       try {
-        const resp = await fetch('http://10.100.2.238:200/audio-capture-transcribe', {
+        const resp = await fetch('http://10.200.1.99:200/audio-capture-transcribe', {
           method: 'POST', body: form
         });
         if (!resp.ok) throw new Error(await resp.text());
@@ -194,7 +194,7 @@ runDiagBtn.addEventListener('click', async () => {
   }));
 
   try {
-    const resp = await fetch('http://10.100.2.238:200/follow-up', {
+    const resp = await fetch('http://10.200.1.99:200/follow-up', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
@@ -252,7 +252,7 @@ runDiagBtn.addEventListener('click', async () => {
       }));
       console.log('➡️ Sending to /diagnose:', answers);
       try {
-        const resp2 = await fetch('http://10.100.2.238:200/diagnose', {
+        const resp2 = await fetch('http://10.200.1.99:200/diagnose', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(answers)
         });
