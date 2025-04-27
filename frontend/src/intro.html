@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Measly</title>
+  <style>
+    /* Reset styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    /* Background GIF */
+    body::before {
+      content: "";
+      background: url('./img1.gif') no-repeat center center/cover;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: -1;
+      opacity: 0.9;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 1.0);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(8px);
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 24px;
+      background-color: #ff5c5c;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #e04848;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Welcome to Measly</h1>
+    <form id="emailForm">
+      <input type="email" id="emailInput" placeholder="Enter your email..." required />
+      <br/>
+      <button type="submit">Get Started</button>
+    </form>
+  </div>
+
+  <script>
+    // Create an empty email list
+    const emailList = [];
+
+    // Grab form and input
+    const form = document.getElementById('emailForm');
+    const emailInput = document.getElementById('emailInput');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); // prevent page reload
+
+      const email = emailInput.value.trim();
+      if (email && emailList.length < 100) {
+        emailList.push(email);
+        console.log(`📩 New Email Collected: ${email}`);
+        console.log('✅ Current Emails List:', emailList);
+      } else if (emailList.length >= 100) {
+        console.log('🚫 Email list is full (100 emails).');
+      }
+      
+      form.reset(); // Clear input after submit
+    });
+  </script>
+
+</body>
+</html>
