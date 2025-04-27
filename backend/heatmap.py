@@ -7,8 +7,10 @@ from Gemini import call_gemini_flash
 from Geolocation import get_address, get_best_points
 from uagents import Agent, Context, Model
 
+second_agent = 'http://localhost:5051/submit'
 
 class Request(Model):
+    report: str
     message: str
 
 class Response(Model):
@@ -29,7 +31,7 @@ data = add_locs()
 def get_datapoints():
     d = data.get_json()
     d.append({'diagnosed':{diagnosed}})
-    return jsonify(d)
+    return d
 
 @app.route('/api/risk', methods=['POST'])
 def calculate_risk():
@@ -94,21 +96,18 @@ def test_endpoint():
 async def startup_function(ctx: Context):
     ctx.logger.info(f"Hello, I'm agent {agent.name} and my address is {agent.address}.")
 
+
+
 @agent.on_message(model=Request)
 async def message_handler(ctx: Context, sender: str, msg: Request):
     ctx.logger.info(f"Received message from {sender}: {msg.message}")
     name = 'UCLA Pavillion'
     lat = 34.070211
     long = 118.446775
-    if msg.message == 'YES':
+    if msg.message == 'yes':
         diagnosed = True
         data.add_point(Point(name, lat, long, 100))
-
-    # Generate a response message
-    response = Response(response=f'Hello, AI Agent! I received your message:{msg.message}')
-    
-    # Send the response back to the AI Agent
-    await ctx.send(sender, response)
+    print("hi")
 
 
 if __name__ == "__main__":
