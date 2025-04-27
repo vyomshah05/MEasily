@@ -51,6 +51,8 @@ const USMapComponent = () => {
   const [targetRisk, setTargetRisk] = useState(0);
   const [riskSuggestions, setRiskSuggestions] = useState([]);
   const [geminiText, setGeminiText] = useState('');
+  const riskSuggestionMarkersRef = useRef([]);
+
 
   useEffect(() => {
     let current = 0;
@@ -129,6 +131,35 @@ const USMapComponent = () => {
     lat: location.latitude,
     lng: location.longitude,
   }));
+
+  useEffect(() => {
+    if (riskPercent > 70 && mapInstance.current && riskSuggestions.length > 0) {
+      // Clear old suggestion markers first if needed
+      riskSuggestionMarkersRef.current.forEach(marker => marker.setMap(null));
+      riskSuggestionMarkersRef.current = [];
+  
+      // Add new markers
+      const newMarkers = riskSuggestions.map((location) => {
+        const marker = new window.google.maps.Marker({
+          position: { lat: location.lat, lng: location.lng },
+          map: mapInstance.current,
+          title: location.name,
+          icon: {
+            url: "https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2_hdpi.png",
+            scaledSize: new window.google.maps.Size(30, 30),
+          },
+        });
+        return marker;
+      });
+  
+      riskSuggestionMarkersRef.current = newMarkers;
+    } else {
+      // Clear risk markers if risk is low
+      riskSuggestionMarkersRef.current.forEach(marker => marker.setMap(null));
+      riskSuggestionMarkersRef.current = [];
+    }
+  }, [riskSuggestions, riskPercent]);
+  
 
   // Load Google Maps script dynamically
   useEffect(() => {
@@ -708,19 +739,35 @@ const sendRouteToBackend = async () => {
   {/* Gemini Text */}
   <div className="risk-textbox">
   {geminiText && (
-    <p style={{ marginBottom: '10px', fontWeight: 'bold', fontSize: '16px' }}>
+    <p style={{ marginBottom: '10px', fontWeight: 'bold', fontSize: '16px' , color:'black'}}>
       {geminiText}
     </p>
   )}
 
-  {/* Risk Locations */}
-  <ul>
-    {riskSuggestions.map((location, index) => (
-      <li key={index}>
-        <strong>{location.name}</strong> ({Math.round(location.risk * 100)}%)
-      </li>
-    ))}
-  </ul>
+  {riskPercent > 70 ? (
+    <ul>
+      {riskSuggestions.map((location, index) => (
+        <li key={index}>
+          <span role="img" aria-label="pin">📍</span> {/* Google Pin icon */}
+          <strong>{location.name}</strong> ({Math.round(location.risk * 100)}%)
+        </li>
+      ))}
+    </ul>
+  ) : riskPercent > 30 ? (
+    <div style={{ fontWeight: 'bold', fontSize: '16px' }}>
+      ⚠️ Moderate Risk:  
+      <ul>
+        <li>Wear a mask in crowded places.</li>
+        <li>Maintain hand hygiene frequently.</li>
+        <li>Limit close contact with others.</li>
+        <li>Check vaccination status.</li>
+      </ul>
+    </div>
+  ) : (
+    <div style={{ fontWeight: 'bold', fontSize: '16px' }}>
+      ✅ Low Risk: Normal precautions advised.
+    </div>
+  )}
   </div>
 </div>
 
