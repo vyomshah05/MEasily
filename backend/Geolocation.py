@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import json
 from Add_point import All_Points, Point
 from Path_risk import get_risk
-from Addresses import add_datapoints
+from Addresses import add_datapoints, add_locs
 
 load_dotenv()
 
@@ -22,7 +22,7 @@ def get_address(address = "Cal Train Station, Sunnyvale"):
         }
 
     prompt = f"""
-    Give me 10 places similar to whatever establishments is at {address} in the following format with nothing else per line: "name:<name>=lat:<lat>=long:<long>" for example: "name:Euston Station=lat:51.5288=long:-0.1339" per line
+    Give me 10 places similar to whatever establishments is at {address} in the following format with nothing else per line: "name:<name>=lat:<lat>=long:<long>" for example: "name:Euston Station=lat:51.5288=long:-0.1339" per line nothing before and nothing after
     """
 
     payload = {
@@ -49,16 +49,14 @@ def get_best_points(response, sp, points):
     places = response.split('\n')
     spots = All_Points()
     for place in places:
-        if (not place):
+        if not place:
             break
-        print(f'place: {place}')
         tokens = place.split('=')
         i = 0
         name = ''
         lat = 0
         long = 0
         for t in tokens:
-            print(i, t)
             if i == 0:
                 name = t.split(':')[1]
                 i += 1
@@ -70,9 +68,12 @@ def get_best_points(response, sp, points):
                 i = 0
         spots.add_point(Point(name, lat, long, 100))
 
-    best = sorted(spots.get_list(), key=lambda x: get_risk(sp, x, points))
-    return {spot.get_name(): (get_risk(sp, spot, points), spot) for spot in spots.get_list()[:3]}
+    # correctly use the best ones
+    best = sorted(spots.get_list(), key=lambda x: get_risk(sp, x, points))[:3]
+    return {spot.get_name(): (get_risk(sp, spot, points)/100, spot) for spot in best}
 
-'''if __name__ == '__main__':
-    alternates = get_best_points(get_address(), sp=Point("Boom", lat=34.05, long=-112.2437, risk=0), points=add_datapoints())
-    {"coefficient_of_determination": 80, 'lists':[{'name': point.get_name(),'lat': point.get_lat(), 'lng': point.get_long(), 'risk': 80} for risk,point in alternates.values()]}'''
+'''
+if __name__ == '__main__':
+    alternates = get_best_points(get_address(), sp=Point("Boom", lat=34.05, long=-112.2437, risk=0), points=add_locs())
+    print({"coefficient_of_determination": 80, 'lists':[{'name': point.get_name(),'lat': point.get_lat(), 'lng': point.get_long(), 'risk': 80} for risk,point in alternates.values()]})
+'''

@@ -1,5 +1,5 @@
 from Path_risk import get_risk as path_risk_get_risk  # Changed this line
-from Addresses import add_datapoints
+from Addresses import add_datapoints, add_locs
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from Add_point import Point, All_Points  # Add this import
@@ -24,6 +24,7 @@ def calculate_risk():
     
     start_point_data = data.get('startPoint')
     end_point_data = data.get('endPoint')
+    travel_mode_data = data.get('travelMode')
 
     # print(f"Start Point: {start_point_data}")
     # print(f"End Point: {end_point_data}")
@@ -46,9 +47,21 @@ def calculate_risk():
         0  # Default risk value
     )
 
+    travel_mode = travel_mode_data
+
     try:
-        risk = path_risk_get_risk(start_point, end_point, add_datapoints())
-        alternates = get_best_points(get_address(end_point.get_name()))
+        risk = path_risk_get_risk(start_point, end_point, add_locs())
+        if travel_mode == 'DRIVING':
+            risk = risk*0.7
+        elif travel_mode == 'TRANSIT':
+            risk = risk*1.2
+        elif travel_mode == 'WALKING':
+            risk = risk*1.1
+        elif travel_mode == 'BICYCLING':
+            risk = risk*1.05
+        else:
+            risk = 1.15*risk
+        alternates = get_best_points(get_address(end_point.get_name()), start_point, add_locs())
         gemini = call_gemini_flash(risk)
         
         return {"coefficient_of_determination": risk, 'text': gemini, 'lists':[{'name': point.get_name(),'lat': point.get_lat(), 'lng': point.get_long(), 'risk': r} for r,point in alternates.values()]}

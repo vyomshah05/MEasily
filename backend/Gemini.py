@@ -39,10 +39,10 @@ def call_gemini_flash(chance: float) -> dict:
         print(f"Unexpected error: {err}")
 
 # ---------------- Main Execution ----------------
-'''if __name__ == "__main__":
+if __name__ == "__main__":
     try:
         gemini = call_gemini_flash(80)
     except requests.HTTPError as http_err:
         print(f"HTTP error occurred: {http_err}\n{http_err.response.text}")
     except Exception as err:
-        print(f"Unexpected error: {err}")'''
+        print(f"Unexpected error: {err}")
