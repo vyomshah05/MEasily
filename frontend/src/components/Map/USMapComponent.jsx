@@ -1,6 +1,42 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './USMapComponent.css';
 import locationData from '/Users/ayushbhardwaj/Documents/LA_hacks/Project1/MEasily/frontend/src/data/locations.json';
+import { Grid, Card, CardContent, Typography, TextField, MenuItem, Button, Box } from '@mui/material';
+import { motion } from 'framer-motion';
+
+
+const MotionCard = props => (
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    whileHover={{ y: -5 }}
+    transition={{ duration: 0.3 }}
+  >
+    <Card
+      sx={{
+        width: '100%',        // ← full-width
+       minHeight: 150,
+       borderRadius: 3,      // slightly rounder
+       boxShadow: 4,         // deeper shadow
+       background: 'white',
+       transition: 'transform 0.2s ease',
+       '&:hover': { boxShadow: 6 }
+     }}
+     {...props}
+   />
+  </motion.div>
+);
+
+
+const travelOptions = [
+  { value: 'DRIVING', label: '🚗 Driving' },
+  { value: 'TRANSIT',  label: '🚆 Transit' },
+  { value: 'WALKING',  label: '🚶 Walking' },
+  { value: 'BICYCLING',label: '🚲 Bicycling' },
+  { value: 'AIRPLANE', label: '✈️ Airplane' },
+];
+
+
 
 const USMapComponent = () => {
   const mapRef = useRef(null);
@@ -8,6 +44,10 @@ const USMapComponent = () => {
   const [travelMode, setTravelMode] = useState("DRIVING");
   const [startLocation, setStartLocation] = useState("");
   const [endLocation, setEndLocation] = useState("");
+
+
+  const [riskPercent, setRiskPercent] = useState(0);
+  const [targetRisk, setTargetRisk] = useState(99);
   
   // Refs to store map-related objects
   const mapInstance = useRef(null);
@@ -526,57 +566,127 @@ const sendRouteToBackend = async () => {
 
   // Update route when travel mode changes
   useEffect(() => {
-    if (mapInstance.current) {
-      updateRoute();
-    }
-  }, [travelMode]);
+    let current = 0;
+    const interval = setInterval(() => {
+      if (current < targetRisk) {
+        current += 1;
+        setRiskPercent(current);
+      } else {
+        clearInterval(interval);
+      }
+    }, 20); // speed of counting up (smaller = faster)
+  
+    return () => clearInterval(interval);
+  }, [targetRisk]);
 
+
+  const getColor = (value) => {
+    if (value <= 10) return '#d1fae5'; // very light green
+    if (value <= 20) return '#6ee7b7'; // medium light green
+    if (value <= 30) return '#34d399'; // dark green
+    
+    if (value <= 40) return '#fef08a'; // light yellow
+    if (value <= 50) return '#fde047'; // brighter yellow
+    if (value <= 60) return '#facc15'; // dark yellow
+    
+    if (value <= 70) return '#fdba74'; // light orange
+    if (value <= 80) return '#fb923c'; // orange
+    if (value <= 90) return '#f97316'; // dark orange
+    
+    return '#ef4444'; // dark red for 91–100
+  };
+  
+
+  
   return (
-    <div className="map-container">
-      <h1>US Cities - Yellow Clustered Dots with Directions API Routes</h1>
-      <div id="map" ref={mapRef}></div>
-      
-      <div className="controls-container">
-        <div>
-        <label htmlFor="startLocation">Enter start location:</label>
-        <input
-        id="startLocation"
+    <div className="map-and-controls">
+  <div id="map" ref={mapRef} />
+
+  <div className="controls-new">
+  <div className="controls-left">
+    {/* Starting Location */}
+    <div className="box start-box">
+      <label>Starting Location:</label>
+      <input
+        type="text"
+        placeholder="Enter Text..."
         value={startLocation}
-        onChange={handleStartLocationChange} // Just update text while typing
-        onBlur={geocodeStartLocation} // Geocode when leaving the field
-        placeholder="Start location"
-        />
-
-        <label htmlFor="endLocation">Enter destination:</label>
-        <input
-        id="endLocation"
-        value={endLocation}
-        onChange={handleEndLocationChange} // Just update text while typing
-        onBlur={geocodeEndLocation} // Geocode when leaving the field
-        placeholder="Destination"
-        />
-
-          <div className='travel-mode'>
-          <label htmlFor="travelMode">Select Transportation Mode:</label>
-          </div>
-          <select 
-            id="travelMode" 
-            value={travelMode} 
-            onChange={handleTravelModeChange}
-          >
-            <option value="DRIVING">🚗 Driving</option>
-            <option value="TRANSIT">🚆 Transit</option>
-            <option value="WALKING">🚶 Walking</option>
-            <option value="BICYCLING">🚲 Bicycling</option>
-            <option value="AIRPLANE">✈️ Airplane</option>
-          </select>
-        </div>
-        <button onClick={calculateRoute}>Calculate Route</button>
-        
-        <div id="routeInfo" className="debug-info">{routeInfo}</div>
-      </div>
+        onChange={handleStartLocationChange}
+        onBlur={geocodeStartLocation}
+      />
     </div>
-);
+
+    {/* Ending Location */}
+    <div className="box end-box">
+      <label>Ending Location:</label>
+      <input
+        type="text"
+        placeholder="Enter Text..."
+        value={endLocation}
+        onChange={handleEndLocationChange}
+        onBlur={geocodeEndLocation}
+      />
+    </div>
+
+    {/* Travel Mode */}
+    <div className="box mode-box">
+      <label>Travel Mode:</label>
+      <select value={travelMode} onChange={handleTravelModeChange}>
+        {travelOptions.map(opt => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {/* Get Path Button */}
+    <div className="box path-box">
+      <button onClick={calculateRoute}>
+        <span className="path-icon">🛣️</span> Get Path
+      </button>
+    </div>
+  </div>
+
+  <div className="controls-right">
+  <div className="risk-content">
+    
+    {/* Circle Section */}
+    <div className="risk-circle-container">
+  <div
+    className="circle"
+    style={{
+      background: `conic-gradient(${getColor(riskPercent)} ${riskPercent}%, #d1d5db 0% 100%)`
+    }}
+  >
+    <div className="percentage">{riskPercent}%</div>
+  </div>
+  <div className="risk-text">
+    <strong>Moderate Chance</strong>
+    {/* <p>Be safe</p> */}
+  </div>
+</div>
+
+
+    {/* Text Box Section */}
+    <div className="risk-textbox">
+      <ul>
+        <li><strong>Location 1</strong> (20%)</li>
+        <li><strong>Locatdsbrfiuvbsrgibewvurbvgbvosibvsrbviosrbnvdfbv9oivbuvbion 2</strong> (30%)</li>
+        <li><strong>Location 3</strong> (40%)</li>
+        <li><strong>Location 4</strong> (50%)</li>
+        <li><strong>Location 5</strong> (60%)</li>
+        {/* Add more locations here */}
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</div>
+
+  );
 };
 
 export default USMapComponent;
