@@ -5,23 +5,9 @@ from flask_cors import CORS
 from Add_point import Point, All_Points  # Add this import
 from Gemini import call_gemini_flash
 from Geolocation import get_address, get_best_points
-from uagents import Agent, Context, Model
 
-second_agent = 'http://localhost:5051/submit'
 
-class Request(Model):
-    report: str
-    message: str
 
-class Response(Model):
-    response: str
-
-agent = Agent(
-    name="map",
-    seed="secret_seed_phrase",
-    port=8000,
-    endpoint=["http://localhost:8000/submit"]
-)
 diagnosed = False
 app = Flask(__name__)
 CORS(app)
@@ -87,29 +73,7 @@ def calculate_risk():
     except Exception as e:
         return jsonify({"error": f"Failed to calculate risk: {str(e)}"}), 500
 
-# Add a simple endpoint that works with GET requests for testing
-@app.route('/api/test', methods=['GET'])
-def test_endpoint():
-    return jsonify({"message": "API is working!"})
-
-@agent.on_event("startup")
-async def startup_function(ctx: Context):
-    ctx.logger.info(f"Hello, I'm agent {agent.name} and my address is {agent.address}.")
-
-
-
-@agent.on_message(model=Request)
-async def message_handler(ctx: Context, sender: str, msg: Request):
-    ctx.logger.info(f"Received message from {sender}: {msg.message}")
-    name = 'UCLA Pavillion'
-    lat = 34.070211
-    long = 118.446775
-    if msg.message == 'yes':
-        diagnosed = True
-        data.add_point(Point(name, lat, long, 100))
-    print("hi")
 
 
 if __name__ == "__main__":
-    agent.run()
     app.run(debug=True, port=5001)
