@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Diagnosis Result</title>
+  <style>
+    body, html {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: #f0f2f5;
+      font-family: sans-serif;
+    }
+    #container {
+      max-width: 800px; width: 90%;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">Loading diagnosis…</div>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('container');
+      const report = localStorage.getItem('diagnosisReport');
+      container.textContent = report || 'No diagnosis report found.';
+    });
+  </script>
+</body>
+</html>

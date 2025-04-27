@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Measles Diagnostic 3D Viewer</title>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      font-family: sans-serif;
+    }
+    /* Sidebar styling */
+    #sidebar {
+      width: 300px;
+      background: #f7f7f7;
+      border-right: 1px solid #ddd;
+      padding: 16px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    #sidebar h2 {
+      margin-top: 0;
+    }
+    #sidebar label {
+      display: block;
+      margin: 8px 0 4px;
+    }
+    #sidebar select,
+    #sidebar textarea,
+    #sidebar input[type="file"] {
+      width: 100%;
+      padding: 6px;
+      box-sizing: border-box;
+    }
+    #sidebar button {
+      margin-top: 12px;
+      padding: 8px 12px;
+      width: 48%;
+      margin-right: 4%;
+    }
+    #sidebar button:last-child {
+      margin-right: 0;
+    }
+
+    /* Viewer takes rest of screen */
+    #viewer {
+      flex: 1;
+      position: relative;
+      background: black;
+    }
+  </style>
+
+  <!-- import map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three":           "https://unpkg.com/three@0.138.0/build/three.module.js",
+      "OrbitControls":   "https://unpkg.com/three@0.138.0/examples/jsm/controls/OrbitControls.js",
+      "GLTFLoader":      "https://unpkg.com/three@0.138.0/examples/jsm/loaders/GLTFLoader.js",
+      "RoomEnvironment": "https://unpkg.com/three@0.138.0/examples/jsm/environments/RoomEnvironment.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Sidebar: symptom form + diagnosis -->
+  <div id="sidebar">
+    <h2>Patient Symptoms</h2>
+
+    <label for="body-part">Body Part</label>
+    <select id="body-part">
+      <option value="">— select —</option>
+      <option value="Head">Head</option>
+      <option value="Neck">Neck</option>
+      <option value="Left Arm">Left Arm</option>
+      <option value="Right Arm">Right Arm</option>
+      <option value="Torso">Torso</option>
+      <option value="Left Leg">Left Leg</option>
+      <option value="Right Leg">Right Leg</option>
+    </select>
+
+    <label for="symptom">Symptom</label>
+    <select id="symptom">
+      <option value="">— select —</option>
+      <option value="Rash">Rash</option>
+      <option value="Fever">Fever</option>
+      <option value="Cough">Cough</option>
+      <option value="Conjunctivitis">Conjunctivitis</option>
+      <option value="Koplik Spots">Koplik Spots</option>
+    </select>
+
+    <label for="description">Description</label>
+    <textarea id="description" rows="3" placeholder="Describe what you see…"></textarea>
+
+    <label for="image">Upload Photo</label>
+    <input type="file" id="image" accept="image/*" />
+
+    <div>
+      <button id="add-symptom">Add Symptom</button>
+      <button id="run-diagnosis">Get Diagnosis</button>
+    </div>
+
+    <h2>Diagnosis Report</h2>
+    <pre id="report"
+         style="white-space: pre-wrap; background:#eee; padding:8px; min-height:100px;"></pre>
+         <div id="symptom-popup" style="display:none; margin-top:16px; padding:12px; background:#fff; border:1px solid #ccc;">
+          <h3 id="popup-title">Add details for <span id="popup-part"></span></h3>
+        
+          <label>Upload Photo
+            <input type="file" id="popup-image" accept="image/*">
+          </label>
+        
+          <label style="display:block; margin-top:8px;">
+            Record Audio
+            <button id="popup-record">Start</button>
+          </label>
+          <audio id="popup-playback" controls style="display:none; margin-top:8px;"></audio>
+        
+          <div id="popup-followups" style="margin-top:8px;">
+            <p>Follow-up questions:</p>
+            <ul id="popup-questions"></ul>
+          </div>
+        
+          <button id="popup-submit" style="margin-top:12px;">Submit Symptom</button>
+          <button id="popup-cancel" style="margin-top:12px; margin-left:8px;">Cancel</button>
+        </div>
+  </div>
+
+  <!-- Three.js viewer -->
+  <div id="viewer">
+    <script type="module" src="./body.js"></script>
+  </div>
+</body>
+</html>
