@@ -1,0 +1,92 @@
+import React, { useEffect } from 'react';
+
+const LoadingScreen = ({ onFinish }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onFinish();
+    }, 5000); // 5 seconds
+
+    return () => clearTimeout(timer);
+  }, [onFinish]);
+
+  return (
+    <div style={styles.container}>
+      <img
+        src="/heartbeat.gif"  // <-- Important: leading slash! Means from "public/"
+        alt="Loading..."
+        style={styles.image}
+      />
+      <h2 style={styles.text}>Loading, please wait...</h2>
+    </div>
+  );
+};
+
+const styles = {
+  container: {
+    backgroundColor: '#ffffff',
+    height: '100vh',
+    width: '100vw',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    height: '300px',
+    width: '300px',
+    objectFit: 'contain',
+  },
+  text: {
+    color: 'black',
+    marginTop: '20px',
+    fontSize: '24px',
+  },
+};
+
+export default LoadingScreen;'''
+import React, { useEffect } from 'react';
+
+const LoadingScreen = ({ onFinish }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onFinish();
+    }, 5000); // 5 seconds
+
+    return () => clearTimeout(timer);
+  }, [onFinish]);
+
+  return (
+    <div style={styles.container}>
+      <img
+        src="/heartbeat.gif"  // <-- Important: leading slash! Means from "public/"
+        alt="Loading..."
+        style={styles.image}
+      />
+      <h2 style={styles.text}>Loading, please wait...</h2>
+    </div>
+  );
+};
+
+const styles = {
+  container: {
+    backgroundColor: '#ffffff',
+    height: '100vh',
+    width: '100vw',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    height: '300px',
+    width: '300px',
+    objectFit: 'contain',
+  },
+  text: {
+    color: 'black',
+    marginTop: '20px',
+    fontSize: '24px',
+  },
+};
+
+export default LoadingScreen;
