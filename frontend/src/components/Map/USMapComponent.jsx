@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './USMapComponent.css';
-import locationData from '/Users/ayushbhardwaj/Documents/LA_hacks/Project1/MEasily/frontend/src/data/locations.json';
+import locationData from '/Users/doubledogok/MEasily/frontend/src/data/locations.json';
 import { Grid, Card, CardContent, Typography, TextField, MenuItem, Button, Box } from '@mui/material';
 import { motion } from 'framer-motion';
 
@@ -44,10 +44,39 @@ const USMapComponent = () => {
   const [travelMode, setTravelMode] = useState("DRIVING");
   const [startLocation, setStartLocation] = useState("");
   const [endLocation, setEndLocation] = useState("");
+  const [blinking, setBlinking] = useState(false);
 
 
   const [riskPercent, setRiskPercent] = useState(0);
-  const [targetRisk, setTargetRisk] = useState(99);
+  const [targetRisk, setTargetRisk] = useState(0);
+  const [riskSuggestions, setRiskSuggestions] = useState([]);
+  const [geminiText, setGeminiText] = useState('');
+
+  useEffect(() => {
+    let current = 0;
+    const interval = setInterval(() => {
+      if (current < targetRisk) {
+        current += 1;
+        setRiskPercent(current);
+      } else {
+        clearInterval(interval);
+        setBlinking(true); // 👈 Start blinking once counting finishes
+      }
+    }, 20); // speed
+  
+    return () => clearInterval(interval);
+  }, [targetRisk]);
+
+  const getBlinkingClass = (value) => {
+    if (!blinking) return ''; // Not blinking until finished
+    if (value == 0) return 'blink-white';
+    else if (value <= 30) return 'blink-green';
+    else if (value <= 70) return 'blink-yellow';
+    return 'blink-red';
+  };
+
+
+
   
   // Refs to store map-related objects
   const mapInstance = useRef(null);
@@ -450,6 +479,12 @@ const sendRouteToBackend = async () => {
       
       const data = await response.json();
       console.log("Backend response:", data);
+
+      setTargetRisk(data.coefficient_of_determination); 
+
+      setGeminiText(data.text || ""); 
+
+      setRiskSuggestions(data.lists || []);
       
       // Display the risk coefficient in the route info
       setRouteInfo(prevInfo => 
@@ -564,20 +599,20 @@ const sendRouteToBackend = async () => {
   };
 
 
-  // Update route when travel mode changes
-  useEffect(() => {
-    let current = 0;
-    const interval = setInterval(() => {
-      if (current < targetRisk) {
-        current += 1;
-        setRiskPercent(current);
-      } else {
-        clearInterval(interval);
-      }
-    }, 20); // speed of counting up (smaller = faster)
+  // // Update route when travel mode changes
+  // useEffect(() => {
+  //   let current = 0;
+  //   const interval = setInterval(() => {
+  //     if (current < targetRisk) {
+  //       current += 1;
+  //       setRiskPercent(current);
+  //     } else {
+  //       clearInterval(interval);
+  //     }
+  //   }, 20); // speed of counting up (smaller = faster)
   
-    return () => clearInterval(interval);
-  }, [targetRisk]);
+  //   return () => clearInterval(interval);
+  // }, [targetRisk]);
 
 
   const getColor = (value) => {
@@ -599,7 +634,7 @@ const sendRouteToBackend = async () => {
 
   
   return (
-    <div className="map-and-controls">
+    <div className={`map-and-controls ${getBlinkingClass(riskPercent)}`}>
   <div id="map" ref={mapRef} />
 
   <div className="controls-new">
@@ -669,16 +704,26 @@ const sendRouteToBackend = async () => {
 
 
     {/* Text Box Section */}
-    <div className="risk-textbox">
-      <ul>
-        <li><strong>Location 1</strong> (20%)</li>
-        <li><strong>Locatdsbrfiuvbsrgibewvurbvgbvosibvsrbviosrbnvdfbv9oivbuvbion 2</strong> (30%)</li>
-        <li><strong>Location 3</strong> (40%)</li>
-        <li><strong>Location 4</strong> (50%)</li>
-        <li><strong>Location 5</strong> (60%)</li>
-        {/* Add more locations here */}
-      </ul>
-    </div>
+    <div>
+  {/* Gemini Text */}
+  <div className="risk-textbox">
+  {geminiText && (
+    <p style={{ marginBottom: '10px', fontWeight: 'bold', fontSize: '16px' }}>
+      {geminiText}
+    </p>
+  )}
+
+  {/* Risk Locations */}
+  <ul>
+    {riskSuggestions.map((location, index) => (
+      <li key={index}>
+        <strong>{location.name}</strong> ({Math.round(location.risk * 100)}%)
+      </li>
+    ))}
+  </ul>
+  </div>
+</div>
+
 
   </div>
 </div>

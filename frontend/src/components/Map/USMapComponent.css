@@ -232,6 +232,13 @@
   color: black;
 }
 
+.risk-textbox p {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: black;
+}
+
 
 .risk-textbox {
   background: white;
@@ -242,4 +249,31 @@
   overflow-y: auto; /* Scroll vertically if needed */
   overflow-x: auto; /* Scroll horizontally if text too big */
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+@keyframes blink-green {
+  0%, 100% { background-color: #d1fae5; }
+  50% { background-color: #34d399; }
+}
+
+@keyframes blink-yellow {
+  0%, 100% { background-color: #fef08a; }
+  50% { background-color: #facc15; }
+}
+
+@keyframes blink-red {
+  0%, 100% { background-color: #fecaca; }
+  50% { background-color: #f87171; }
+}
+
+.blink-green {
+  animation: blink-green 1s infinite;
+}
+
+.blink-yellow {
+  animation: blink-yellow 1s infinite;
+}
+
+.blink-red {
+  animation: blink-red 1s infinite;
 }
