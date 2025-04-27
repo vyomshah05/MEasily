@@ -1,74 +1,245 @@
-.map-container {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-  }
-  
-  #map {
-    height: 600px;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
-  h1 {
-    color: #333;
-  }
-  
-  .controls-container {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f8f8f8;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
+/* Container */
+.map-and-controls {
+  font-family: 'Roboto', sans-serif;
+  padding: 20px;
+  background: #fafafa;
+  width: 100%;
+}
 
-  .controls-container > div {
-    display : flex;
-    align-items: center;
-    gap: 10px;
-  }
+/* Map Styling */
+#map {
+  height: 600px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
 
-   .travel-mode {
-    margin-left: 50px;
-  }
-  
-  select {
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    font-size: 16px;
-    width: 200px;
-  }
-  
-  label {
-    color: darkblue;
-    font-weight: bold;
-    margin-right: 10px;
-    font-size: 16px;
-  }
-  
-  .debug-info {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 12px;
-  }
-  
-  button {
-    margin-top: 15px;
-    padding: 10px 15px;
-    background-color: #4285F4;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  button:hover {
-    background-color: #3367D6;
-  }
+.controls-new {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  margin-top: 20px;
+  height: 280px; /* Control height fixed, so everything fits */
+}
+
+/* Left side controls smaller */
+.controls-left {
+  flex: 0.4;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 15px;
+  height: 100%;
+}
+
+/* Right side larger and matches height */
+.controls-right {
+  flex: 0.6;
+  background: #e5e7eb;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Individual Boxes */
+.box {
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  height: 100%; /* Important! So boxes shrink properly */
+}
+
+/* Colored Boxes */
+.start-box {
+  background: #6ee7f9; /* Light blue */
+}
+.end-box {
+  background: #fb7185; /* Light red */
+}
+.mode-box {
+  background: #c4b5fd; /* Light purple */
+}
+.path-box {
+  background: #86efac; /* Light green */
+}
+
+/* Inputs and Selects */
+.box label {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.box input,
+.box select {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+/* Button */
+.path-box button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  background: #34d399;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.path-box button:hover {
+  background: #059669;
+  color: white;
+}
+
+/* Small Path Icon */
+.path-icon {
+  font-size: 1.5rem;
+}
+
+/* Right side risk content */
+.risk-content {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Circle */
+.circle {
+  width: 150px;
+  height: 150px;
+  background: conic-gradient(#f97316 0%, #d1d5db 0% 100%);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.percentage {
+  font-size: 2rem;
+  color: white;
+  font-weight: bold;
+}
+
+/* Risk Info */
+.risk-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.risk-text {
+  text-align: left;
+  margin-bottom: 10px;
+  color: black; /* <<< Add this */
+}
+
+.risk-text strong {
+  font-size: 1.2rem;
+  color: black; /* <<< Add this */
+}
+
+.risk-text p {
+  margin-top: 5px;
+  font-size: 1rem;
+  color: black; /* <<< Add this */
+}
+
+/* Locations List */
+.locations ul {
+  list-style: none;
+  padding: 0;
+}
+
+.locations li {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+
+.circle {
+  width: 200px; /* Increased from 150px to 200px */
+  height: 200px;
+  background: conic-gradient(#f97316 0%, #d1d5db 0% 100%);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box label,
+.box input,
+.box select {
+  color: black; /* <<< Add this */
+}
+
+
+.risk-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  width: 100%;
+}
+
+/* Circle Styling (Already Exists) */
+.risk-circle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* TextBox Section */
+.risk-textbox {
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+  height: 200px; /* FIXED height */
+  width: 250px;  /* FIXED width */
+  overflow-y: auto; /* Scroll if overflow */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.risk-textbox ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.risk-textbox li {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: black;
+}
+
+
+.risk-textbox {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  width: 600px; /* Increased width */
+  height: 250px; /* Fixed height */
+  overflow-y: auto; /* Scroll vertically if needed */
+  overflow-x: auto; /* Scroll horizontally if text too big */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
