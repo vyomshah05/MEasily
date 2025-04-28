@@ -166,7 +166,7 @@ const USMapComponent = () => {
     // Function to load Google Maps API
     const loadGoogleMapsAPI = () => {
       const googleMapScript = document.createElement('script');
-      googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDISJgs4T4krdfk4-ZihPzeZS_4CCi3Yo0
+      googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=
       &libraries=places,marker&callback=initMap`;
       googleMapScript.async = true;
       googleMapScript.defer = true;

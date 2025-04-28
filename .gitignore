@@ -1,0 +1,46 @@
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment variables and settings
+.env
+*.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Node.js
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# Editor folders
+.vscode/
+.idea/
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# Dependency lock files (sometimes)
+package-lock.json
+yarn.lock
+# (only ignore if you want totally fresh installs every time — usually you *don't* ignore these.)
+
+# Coverage reports
+coverage/
+*.cover
+*.pyc
+
+# Temporary files
+*.swp
+*.swo
+*.bak
+*.tmp
